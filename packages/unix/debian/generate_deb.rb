@@ -31,6 +31,16 @@ else
   jamfile="sources/jamfiles/x86_64-linux-build.jam"
 end
 
+# Add libgc dependency for 64 bit x86
+if(`uname -m` =~ /x86_64/)
+  additional_fpm_flags << ' -d "libgc-dev (>= 0)"'
+end
+ 
+# Configure and build first 2 stages
+puts "Configuring with #{configure_flags}"
+system("./configure #{configure_flags}") || exit(1)
+system("make 2-stage-bootstrap") || exit(1)
+
 # Overwrite the rpath, so the packaged binaries use the absolute
 # install dir instead (fixes problems when /proc is missing, eg. in a chroot).
 original_jamfile_contents = File.read(jamfile)
@@ -40,15 +50,7 @@ at_exit do
   File.open(jamfile, 'w') { |f| f.write(original_jamfile_contents) }
 end
  
-# Add libgc dependency for 64 bit x86
-if(`uname -m` =~ /x86_64/)
-  additional_fpm_flags << ' -d "libgc-dev (>= 0)"'
-end
- 
-puts "Configuring with #{configure_flags}"
- 
-# Configure and build
-system("./configure #{configure_flags}") || exit(1)
+# Build the last stage with the modified rpath jamfile
 system("make 3-stage-bootstrap") || exit(1)
  
 # Install into staging area
