@@ -12,7 +12,6 @@ include FileUtils
  
 # Create staging area
 STAGING_DIR=`mktemp -d`.chomp
-VERSION="2013.2"
 INSTALL_DIR="/usr/lib/opendylan"
 
 additional_fpm_flags=""
@@ -69,6 +68,8 @@ srcdir = Dir.pwd
 Dir.chdir "#{STAGING_DIR}/usr/bin"
 Dir["../lib/opendylan/bin/*"].each { |f| FileUtils.ln_s(f, File.basename(f)) }
 Dir.chdir srcdir
+
+VERSION=`./Bootstrap.3/bin/dylan-compiler -version`.chomp.sub('Version ', '')
  
 # Generate the actual deb package
 FPM_CMD=<<EOF
