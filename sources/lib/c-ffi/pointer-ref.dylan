@@ -78,6 +78,20 @@ define pointer-ref-method C-unsigned-long-at
   primitive-unwrap-machine-word
   end;
 
+define pointer-ref-method C-size-at
+  <C-raw-size*> raw-c-size <machine-word>
+  primitive-c-size-at
+  primitive-wrap-machine-word
+  primitive-unwrap-machine-word
+  end;
+
+define pointer-ref-method C-ssize-at
+  <C-raw-ssize*> raw-c-ssize <machine-word>
+  primitive-c-ssize-at
+  primitive-wrap-machine-word
+  primitive-unwrap-machine-word
+  end;
+
 define pointer-ref-method C-signed-int-at
   <C-raw-signed-int*> raw-c-signed-int <machine-word>
   primitive-c-signed-int-at
