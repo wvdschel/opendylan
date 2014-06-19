@@ -132,8 +132,8 @@ define function %link-target
     let count
       = raw-as-integer(%call-c-function ("readlink")
 			   (path :: <raw-byte-string>, buffer :: <raw-byte-string>,
-			    bufsize :: <raw-c-unsigned-long>)
-			=> (count :: <raw-c-signed-int>)
+			    bufsize :: <raw-c-size-t>)
+			=> (count :: <raw-c-ssize-t>)
 			   (primitive-string-as-raw(as(<byte-string>, link)),
 			    primitive-string-as-raw(buffer),
 			    integer-as-raw(8192))
